@@ -1,0 +1,13 @@
+{
+  "name": "동지야행",
+  "short_name": "동지야행",
+  "start_url": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#0b0d2a",
+  "theme_color": "#0b0d2a",
+  "icons": [
+    { "src": "assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "assets/app_icon_512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
