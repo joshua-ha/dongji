@@ -1,53 +1,54 @@
-   name: Deploy to GitHub Pages
+# main 브랜치에 push하면: 테스트 → Rust 엔진을 WebAssembly로 빌드 → GitHub Pages에 배포
+name: Deploy to GitHub Pages
 
-   on:
-     push:
-       branches: [main]
-     workflow_dispatch:
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
 
-   permissions:
-     contents: read
-     pages: write
-     id-token: write
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
-   concurrency:
-     group: pages
-     cancel-in-progress: true
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
-   jobs:
-     build:
-       runs-on: ubuntu-latest
-       steps:
-         - uses: actions/checkout@v4
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-         - uses: dtolnay/rust-toolchain@stable
-           with:
-             targets: wasm32-unknown-unknown
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
 
-         - name: 엔진 테스트
-           run: cargo test --release
+      - name: 엔진 테스트
+        run: cargo test --release
 
-         - name: WebAssembly 빌드
-           run: cargo rustc --release --lib --target wasm32-unknown-unknown --crate-type cdylib
+      - name: WebAssembly 빌드
+        run: cargo rustc --release --lib --target wasm32-unknown-unknown --crate-type cdylib
 
-         - name: 사이트 조립
-           run: |
-             mkdir -p _site/engine
-             cp -r web/* _site/
-             cp target/wasm32-unknown-unknown/release/dongji.wasm _site/engine/dongji.wasm
-             touch _site/.nojekyll
-             ls -la _site _site/engine
+      - name: 사이트 조립
+        run: |
+          mkdir -p _site/engine
+          cp -r web/* _site/
+          cp target/wasm32-unknown-unknown/release/dongji.wasm _site/engine/dongji.wasm
+          touch _site/.nojekyll
+          ls -la _site _site/engine
 
-         - uses: actions/upload-pages-artifact@v3
-           with:
-             path: _site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
 
-     deploy:
-       needs: build
-       runs-on: ubuntu-latest
-       environment:
-         name: github-pages
-         url: ${{ steps.deployment.outputs.page_url }}
-       steps:
-         - id: deployment
-           uses: actions/deploy-pages@v4
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
