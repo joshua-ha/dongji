@@ -1,0 +1,22 @@
+[package]
+name = "dongji"
+version = "0.1.0"
+edition = "2021"
+description = "冬至夜行 (동지야행) — 주술 액션 텍스트 RPG 엔진. 로그 = UI."
+
+[lib]
+# rlib: CLI/테스트용, staticlib: iOS(Swift)에 링크하는 .a, cdylib: 개발 서버(ctypes)용 .so
+crate-type = ["rlib", "staticlib", "cdylib"]
+
+[[bin]]
+name = "dongji-cli"
+path = "src/main.rs"
+
+[dependencies]
+# 의도적으로 외부 의존성 없음 (iOS 빌드/바이너리 크기 최소화)
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true

@@ -1,0 +1,34 @@
+# XcodeGen 설정: `brew install xcodegen` 후 ./build_ios.sh 가 Dongji.xcodeproj 를 만든다.
+name: Dongji
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  Dongji:
+    type: application
+    platform: iOS
+    sources:
+      - path: Dongji
+      - path: ../web          # HTML/CSS/JS/에셋을 앱 번들의 web/ 폴더로 복사
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - framework: ../Dongji.xcframework   # Rust 엔진 (build_ios.sh 가 생성)
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.dongji
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.0"
+        SWIFT_OBJC_BRIDGING_HEADER: Dongji/Dongji-Bridging-Header.h
+        HEADER_SEARCH_PATHS: $(PROJECT_DIR)/../include
+        TARGETED_DEVICE_FAMILY: "1,2"          # iPhone + iPad
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: 동지야행
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIStatusBarHidden: YES
+        INFOPLIST_KEY_UIRequiresFullScreen: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
